@@ -28,5 +28,5 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@master
       with:
-        name: pnpm-lock.yml
-        path: pnpm-lock.yml
+        name: pnpm-lock.yaml
+        path: pnpm-lock.yaml
