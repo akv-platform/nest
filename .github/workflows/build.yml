@@ -1,5 +1,5 @@
 name: Test setup-node caching
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 jobs:
   run:
     name: Node test
@@ -12,17 +12,21 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - uses: akv-platform/setup-node@add-caching-for-node-dependencies
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 6.10.0
+    - name: Generate pnpm file
+      run: pnpm install
+    - uses: jacobwgillespie/setup-node@cache-pnpm
       with:
         node-version: ${{ matrix.version }}
-        cache: npm
-    - name: Node version
-      shell: pwsh
-      run: node --version
-    - name: Yarn version
-      run: yarn --version
-    - name: Npm version
-      shell: pwsh
-      run: npm --version
+        cache: pnpm
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install
+    - name: upload screenshot
+      if: ${{ always() }}
+      uses: actions/upload-artifact@master
+      with:
+        name: pnpm-lock.yml
+        path: pnpm-lock.yml
