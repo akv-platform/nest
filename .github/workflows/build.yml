@@ -19,6 +19,7 @@ jobs:
     - name: pnpm store path
       shell: pwsh
       run: | 
+        pnpm add express
         $res = pnpm store path
         rm -rf $res
     - uses: actions/setup-node@v2.3.0
